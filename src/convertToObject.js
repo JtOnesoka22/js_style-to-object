@@ -6,8 +6,8 @@
  * @return {object}
  */
 function convertToObject(sourceString) {
-  function formatPropertyString(propertyString) {
-    const [key, value] = propertyString.split(':').map((s) => s.trim());
+  function parseDeclaration(declarationString) {
+    const [key, value] = declarationString.split(':').map((s) => s.trim());
 
     if (!key || !value) {
       return null;
@@ -20,15 +20,15 @@ function convertToObject(sourceString) {
     .split(';')
     .map((s) => s.trim())
     .filter(Boolean)
-    .map((s) => formatPropertyString(s))
+    .map((s) => parseDeclaration(s))
     .filter(Boolean);
 
-  const object = objectStrings.reduce(
-    (obj, item) => Object.assign(obj, item),
+  const stylesMap = objectStrings.reduce(
+    (accumulator, item) => ({ ...accumulator, ...item }),
     {},
   );
 
-  return object;
+  return stylesMap;
 }
 
 module.exports = convertToObject;
